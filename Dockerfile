@@ -13,7 +13,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install curl pkg-config libssl-dev build-essential libpq-dev -y
 WORKDIR /app
 
-COPY --from=0 /app/.env /app
+# COPY --from=0 /app/.env /app
 COPY --from=0 /app/target/release/blog-project /app
 COPY /templates/ /app/templates
 
