@@ -93,7 +93,9 @@ async fn new_post(pool: web::Data<DbPool>, item: web::Json<NewPostHandler>) -> i
 #[actix_web::main]
 async fn main() -> std::io::Result<()>{
     dotenv().ok();
-    let db_url = env::var("DATABASE_URL").expect("BD url don't fund");   
+    let db_url = env::var("DATABASE_URL").expect("BD url don't found");
+    let port = env::var("PORT").expect("BD url variable don't found");
+    let port : u16 = port.parse().unwrap();     
 
     let connection = ConnectionManager::<PgConnection>::new(db_url);
     let pool = Pool::builder().build(connection).expect("Can't build Pool");//Whit this we have acces to the database
@@ -107,7 +109,7 @@ async fn main() -> std::io::Result<()>{
         .service(get_post)
         .app_data(web::Data::new(pool.clone()))
         .app_data(web::Data::new(tera))
-    }).bind(("localhost", 3000)).unwrap().run().await
+    }).bind(("0.0.0.0", port)).unwrap().run().await
 }
 
     // let conn = PgConnection::establish(&db_url).expect("We can't connect to the data base");
